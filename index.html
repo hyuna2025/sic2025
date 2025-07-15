@@ -1,11 +1,292 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <title>나의 웹사이트</title>
+  <meta charset="UTF-8" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+  <!-- Flickity CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+  <!-- Flickity JS -->
+  <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: #f3e8ff; /* 연보라 연한 배경 */
+      margin: 0;
+      padding: 0;
+      color: #5a2d82; /* 진한 연보라 텍스트 */
+    }
+
+    header {
+      background-image: url('https://source.unsplash.com/1600x400/?lavender,sky');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      text-align: center;
+      padding: 60px 20px;
+      position: relative;
+    }
+
+    /* 어두운 보라색 오버레이로 가독성 개선 */
+    header::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(90, 45, 130, 0.5); /* 반투명 연보라 */
+      z-index: 0;
+    }
+
+    header h1, nav {
+      position: relative;
+      z-index: 1;
+    }
+
+    nav {
+      margin-top: 15px;
+    }
+
+    nav a {
+      color: #e9d9ff; /* 연한 보라색 */
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: 600;
+      font-size: 1.1em;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    main {
+      padding: 30px 20px;
+      max-width: 900px;
+      margin: 0 auto;
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 6px 15px rgba(90, 45, 130, 0.2);
+    }
+
+    h2 {
+      color: #7a4dc7; /* 중간 톤 보라 */
+      border-bottom: 2px solid #d3b7ff;
+      padding-bottom: 6px;
+      margin-top: 40px;
+    }
+
+    a {
+      color: #6a4ab9;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: #3f2a90;
+      text-decoration: underline;
+    }
+
+    footer {
+      background-color: #d9c6ff;
+      color: #4b2e83;
+      text-align: center;
+      padding: 15px;
+      margin-top: 40px;
+      font-weight: 600;
+      font-size: 0.9em;
+      letter-spacing: 1px;
+    }
+
+    /* 버튼 스타일 */
+    button {
+      background: linear-gradient(135deg, #a389ff, #6a4ab9);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 25px;
+      margin-top: 30px;
+      box-shadow: 0 6px 12px rgba(106, 74, 185, 0.4);
+      transition: background 0.3s ease;
+      font-weight: 700;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #7a4dc7, #3f2a90);
+      box-shadow: 0 8px 18px rgba(63, 42, 144, 0.6);
+    }
+
+.carousel {
+  background: #f4f4ff;
+  margin-top: 20px;
+}
+
+.carousel-cell {
+  width: 70%;
+  margin-right: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.carousel-cell img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+#guestbook {
+  background-color: #f3eaff;
+  padding: 20px;
+  border-radius: 15px;
+  /* max-width: 600px; */
+  margin: 30px auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+#guestbook h2 {
+  color: #6a4dc4;
+  /* text-align: center; */
+}
+
+#guestInput {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #cbbaff;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+#guestbook button {
+  background-color: #a389ff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#guestbook button:hover {
+  background-color: #7a4dc7;
+}
+
+#guestList {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 20px;
+}
+
+#guestList li {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+</style>
+<script>
+function addMessage() {
+  const input = document.getElementById("guestInput");
+  const list = document.getElementById("guestList");
+  const message = input.value.trim();
+
+  if (message !== "") {
+    const li = document.createElement("li");
+    li.textContent = message;
+    list.prepend(li);  // 최근 글이 위에 오게
+    input.value = "";  // 입력창 초기화
+  } else {
+    alert("내용을 입력해주세요!");
+  }
+}
+</script>
+
+
 </head>
 <body>
-   여기는 index.html 파일입니다. 
+
+  <header>
+    <h1>나의 웹사이트</h1>
+    <nav>
+      <a href="#about">ABOUT ME</a>
+      <a href="#project">PROJECT</a>
+      <a href="#contact">CONTACT</a>
+      <a href="#gallery">GALLERY</a>
+      <a href="#guestbook">guestbook</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="about">
+        <h2>ABOUT ME</h2>
+        <p>저는 웹 개발에 관심이 많은 학생입니다.</p>
+        <img src="https://source.unsplash.com/600x400/?landscape,nature" alt="좋아하는 풍경 사진" width="600">
+    </section>
+
+
+    <section id="project">
+      <h2>PROJECT</h2>
+      <p>현재 진행 중인 프로젝트는 나만의 블로그 만들기입니다.</p>
+    </section>
+
+    <section id="contact">
+      <h2>CONTACT</h2>
+      <p>이메일: example@example.com</p>
+      <p><a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">유튜브 채널 보기</a>
+</p>
+    </section>
+
+    <section id="gallery">
+    <h2>GALLERY</h2>
+    <div class="carousel">
+        <div class="carousel-cell"><img src="img/img01.png" alt="사진1"></div>
+        <div class="carousel-cell"><img src="img/img02.png" alt="사진2"></div>
+        <div class="carousel-cell"><img src="img/img03.png" alt="사진3"></div>
+    </div>
+    </section>
+
+
+    <section id="guestbook">
+  <h2>GUESTBOOK</h2>
+  <textarea id="guestInput" placeholder="방명록에 남길 말을 적어주세요" rows="4" cols="50"></textarea><br>
+  <button onclick="addMessage()">남기기</button>
+
+  <ul id="guestList"></ul>
+</section>
+
+
+    <!-- 버튼 추가 -->
+    <button onclick="showAlert()">클릭하세요</button>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2025 나의 웹사이트. 모든 권리 보유.</p>
+  </footer>
+
+  <script>
+    function showAlert() {
+      alert("오늘도 화이팅!");
+    }
+  </script>
+ <script>
+  var elem = document.querySelector('.carousel');
+  var flkty = new Flickity(elem, {
+    cellAlign: 'left',
+    contain: true,
+    autoPlay: 3000,       // 자동 재생 (3초)
+    wrapAround: true,     // 무한 루프
+    pageDots: true        // 하단 점 표시
+  });
+</script>
+
 </body>
 </html>
